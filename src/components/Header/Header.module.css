@@ -1,0 +1,4 @@
+.HeaderCard {
+  background: linear-gradient(0, #122aa8, #0f2254);
+  height: var(--header-height);
+}
