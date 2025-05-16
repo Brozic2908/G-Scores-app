@@ -152,8 +152,8 @@ export default function SearchScoresPage() {
 
   return (
     <div>
-      <div className="row mb-4">
-        <div className="col-12">
+      <div className="my-4">
+        <div className="">
           <div className="card bg-white shadow-sm p-3">
             <h2 className="mb-3">User Registration</h2>
             <p className="text-muted">

@@ -1,7 +1,7 @@
 .sideBar {
-  /* position: fixed; */
-  /* top: 0; */
-  /* left: 0; */
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
   background-color: #2c3e50;
   padding: 1rem;
   transition: transform 0.3s ease-in-out;
@@ -36,9 +36,27 @@
   font-size: 1.4rem;
 }
 
+/* Add overlay styles */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 998;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .toggleBtn {
     display: inline-block;
+  }
+  .toggleBtn {
+    display: inline-block;
+  }
+  .overlay {
+    display: block;
   }
 }
