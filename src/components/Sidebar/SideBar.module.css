@@ -76,7 +76,7 @@
   width: 0;
   background-color: #0d6efd;
   z-index: -2;
-  transition: width 0.3s ease;
+  transition: width 0.2s ease;
 }
 
 .sideBar .navLink:hover::before,

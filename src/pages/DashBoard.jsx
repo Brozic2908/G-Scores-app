@@ -47,7 +47,7 @@ export default function DashBoard() {
 
         // Cache the data
         dataCache.stats = transformedStats;
-        dataCache.studentCount = studentCount;
+        dataCache.studentCount = allStudents.studentCount;
 
         setStats(transformedStats);
       } catch (error) {
