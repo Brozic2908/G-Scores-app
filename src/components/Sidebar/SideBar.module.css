@@ -21,7 +21,8 @@
 
 .toggleBtn {
   position: fixed;
-  top: 1rem;
+  top: calc(var(--header-height) / 2); /* căn giữa theo chiều cao nút */
+  transform: translateY(-50%);
   left: 1.6rem;
   z-index: 1001;
   display: none;

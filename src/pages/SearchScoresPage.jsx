@@ -211,10 +211,12 @@ export default function SearchScoresPage() {
               <div className="card">
                 <div className="card-header bg-primary text-white">
                   <h5 className="mb-0">
-                    Student results: {student.sbd}
+                    <span className="me-2 mb-1">
+                      Student results: {student.sbd}
+                    </span>
                     {student.ma_ngoai_ngu && (
-                      <span className="badge bg-light text-dark ms-2">
-                        Foreign language: {student.ma_ngoai_ngu}
+                      <span className="badge bg-light text-dark">
+                        Foreign language: {student.ma_ngoai_ngu || "N/A"}
                       </span>
                     )}
                   </h5>

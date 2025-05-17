@@ -9,7 +9,7 @@ export default function SideBar() {
   const closeSidebar = () => setIsOpen(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
   const handleNavClick = () => {
-    if (isMobile) closeSidebar(); // 🔑 Chỉ đóng khi là mobile
+    if (isMobile) closeSidebar(); // Chỉ đóng khi là mobile
   };
 
   // Update mobile state on window resize
