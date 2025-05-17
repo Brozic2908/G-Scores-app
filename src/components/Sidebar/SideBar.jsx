@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 
@@ -28,12 +28,15 @@ export default function SideBar() {
     };
   }, []);
 
-  const navItem = [
-    { to: "/", icon: "fa-chart-line", label: "Scope Spectrum" },
-    { to: "/search", icon: "fa-address-card", label: "Search Scores" },
-    { to: "/topstudent", icon: "fa-ranking-star", label: "Top Students" },
-    { to: "/settings", icon: "fa-gear", label: "Settings" },
-  ];
+  const navItem = useMemo(
+    () => [
+      { to: "/", icon: "fa-chart-line", label: "Scope Spectrum" },
+      { to: "/search", icon: "fa-address-card", label: "Search Scores" },
+      { to: "/topstudent", icon: "fa-ranking-star", label: "Top Students" },
+      { to: "/settings", icon: "fa-gear", label: "Settings" },
+    ],
+    []
+  );
 
   return (
     <div>
@@ -55,7 +58,11 @@ export default function SideBar() {
             <li className="nav-item" key={to}>
               <NavLink
                 to={to}
-                className={"nav-link text-white"}
+                className={({ isActive }) =>
+                  `nav-link text-white ${styles.navLink} ${
+                    isActive ? styles.activeLink : ""
+                  }`
+                }
                 onClick={handleNavClick}
               >
                 <i className={`fa-solid ${icon} me-2`}></i>

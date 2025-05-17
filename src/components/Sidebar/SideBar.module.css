@@ -48,11 +48,50 @@
   z-index: 998;
 }
 
+/* Hiệu ứng khi NavLink active */
+.activeLink {
+  background-color: #0d6efd;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.sideBar .navLink {
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+/* Hiệu ứng nền từ trái sang phải */
+.sideBar .navLink::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: #0d6efd;
+  z-index: -2;
+  transition: width 0.3s ease;
+}
+
+.sideBar .navLink:hover::before,
+.sideBar .navLink.activeLink::before {
+  width: 100%;
+}
+
+/* Đảm bảo nội dung hiển thị phía trên nền hiệu ứng */
+.sideBar .navLink > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .toggleBtn {
-    display: inline-block;
-  }
   .toggleBtn {
     display: inline-block;
   }

@@ -12,6 +12,12 @@ import {
 } from "recharts";
 import scoreService from "../services/scoreService";
 
+// Cache to store fetched data
+const dataCache = {
+  stats: null,
+  studentCount: null,
+};
+
 export default function DashBoard() {
   const [stats, setStats] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +26,13 @@ export default function DashBoard() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        if (dataCache.stats && dataCache.studentCount !== null) {
+          setStats(dataCache.stats);
+          setStudentCount(dataCache.studentCount);
+          setIsLoading(false);
+          return;
+        }
+
         const allStudents = await scoreService.getDashboardScore();
         setStudentCount(allStudents.studentCount);
         let data = allStudents.data;
@@ -31,6 +44,10 @@ export default function DashBoard() {
           average: data[subject].average,
           below_average: data[subject].below_average,
         }));
+
+        // Cache the data
+        dataCache.stats = transformedStats;
+        dataCache.studentCount = studentCount;
 
         setStats(transformedStats);
       } catch (error) {

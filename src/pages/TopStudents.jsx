@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import scoreService from "../services/scoreService";
 
+// Cache to store fetched data
+const dataCache = {
+  topStudents: null,
+};
+
 export default function TopStudents() {
   const [topStudents, setTopStudents] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("A");
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadData();
-  }, [selectedGroup]);
 
   // Define mapping for API responses
   const groupResponseMapping = {
@@ -30,45 +31,57 @@ export default function TopStudents() {
     },
   };
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const result = await scoreService.getTopStudent();
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        let result;
 
-      if (result && Array.isArray(result)) {
-        // Transform API response to match component structure
-        const transformedStudents = result.map((student) => {
-          // Map the scores based on the selected group
-          const studentData = {
-            sbd: student.registration_number,
-            totalScore: parseFloat(student.total_score), // Calculate average from total
-          };
+        if (dataCache.topStudents) {
+          result = dataCache.topStudents;
+        } else {
+          dataCache.topStudents = result = await scoreService.getTopStudent();
+        }
 
-          // Map API fields to component fields based on selected group
-          const { scoreFields, componentFields } =
-            groupResponseMapping[selectedGroup];
+        if (result && Array.isArray(result)) {
+          // Transform API response to match component structure
+          const transformedStudents = result.map((student) => {
+            // Map the scores based on the selected group
+            const studentData = {
+              sbd: student.registration_number,
+              totalScore: parseFloat(student.total_score), // Calculate average from total
+            };
 
-          scoreFields.forEach((field, index) => {
-            if (student[field]) {
-              studentData[componentFields[index]] = parseFloat(student[field]);
-            } else {
-              studentData[componentFields[index]] = null;
-            }
+            // Map API fields to component fields based on selected group
+            const { scoreFields, componentFields } =
+              groupResponseMapping[selectedGroup];
+
+            scoreFields.forEach((field, index) => {
+              if (student[field]) {
+                studentData[componentFields[index]] = parseFloat(
+                  student[field]
+                );
+              } else {
+                studentData[componentFields[index]] = null;
+              }
+            });
+
+            return studentData;
           });
-
-          return studentData;
-        });
-        setTopStudents(transformedStudents);
-      } else {
+          setTopStudents(transformedStudents);
+        } else {
+          setTopStudents([]);
+        }
+      } catch (err) {
+        console.error("Failed to load top students: ", err);
         setTopStudents([]);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load top students: ", err);
-      setTopStudents([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    loadData();
+  }, [selectedGroup]);
 
   const handleGroupChange = (e) => {
     setSelectedGroup(e.target.value);
@@ -77,31 +90,19 @@ export default function TopStudents() {
   const getGroupSubjects = (group) => {
     switch (group) {
       case "A":
-        return {
-          subjects: ["Math", "Physics", "Chemistry"],
-          keys: ["math_score", "physics_score", "chemistry_score"],
-        };
+        return { subjects: ["Math", "Physics", "Chemistry"] };
       case "B":
-        return {
-          subjects: ["Math", "Chemistry", "Biology"],
-          keys: ["math_score", "chemistry_score", "biology_score"],
-        };
+        return { subjects: ["Math", "Chemistry", "Biology"] };
       case "C":
-        return {
-          subjects: ["Literature", "History", "Geography"],
-          keys: ["literature_score", "history_score", "geography_score"],
-        };
+        return { subjects: ["Literature", "History", "Geography"] };
       case "D":
-        return {
-          subjects: ["Math", "Literature", "Foreign Language"],
-          keys: ["math_score", "literature_score", "foreign_language_score"],
-        };
+        return { subjects: ["Math", "Literature", "Foreign Language"] };
       default:
-        return { subjects: [], keys: [] };
+        return { subjects: [] };
     }
   };
 
-  const { subjects, keys } = getGroupSubjects(selectedGroup);
+  const { subjects } = getGroupSubjects(selectedGroup);
 
   return (
     <div className="topStudents card shadow-sm p-3">
